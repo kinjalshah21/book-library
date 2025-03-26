@@ -10,12 +10,15 @@
     <div class="container">
         <!-- Search bar and filters-->
          <div class="controls">
-            <input type="text" id="search" placeholder="Search by title or author...">
-            <select id="sort">
-                <option value="title">Sort by Title</option>
-                <option value="publishedDate">Sort by Date</option>
-            </select>
-            <button id="toggle-view">Change View</button>
+            <input type="text" id="search-text" placeholder="Search by title or author...">
+            <div>
+                <button id="search-btn">Search</button>
+                <select id="sort">
+                    <option value="title">Sort by Title</option>
+                    <option value="publishedDate">Sort by Date</option>
+                </select>
+                <button id="toggle-view">Change View</button>
+            </div>
          </div>
 
         <!-- Books List/Grid -->

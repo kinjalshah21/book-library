@@ -7,11 +7,11 @@
 body {
     background-color: #f4f4f4;
     font-family: Arial, Helvetica, sans-serif;
-    padding: 20px;
+    padding: 10px;
 }
 
 .container {
-    max-width: 90%;
+    width: 100%;
     margin: 0 auto;
     background: white;
     padding: 20px;
@@ -38,7 +38,8 @@ body {
     min-width: 150px;
 }
 
-#toggle-view {
+#toggle-view,
+#search-btn {
     background-color: #007bff;
     color: white;
     cursor: pointer;
@@ -46,7 +47,8 @@ body {
     transition: background 0.3s;
 }
 
-#toggle-view:hover {
+#toggle-view:hover,
+#search-btn:hover {
     background-color: #0056b3;
 }
 
@@ -54,6 +56,44 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+.book-item {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.book-item:hover {
+    background: #f2f2f5;
+}
+
+.book-item img {
+    width: 70px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.book-details {
+    flex-grow: 1;
+}
+
+.book-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.book-author, .book-publisher , .book-date {
+    color: #555;
+    font-size: 14px;
+    padding: 2px;
 }
 
 .pagination {
@@ -87,5 +127,15 @@ body {
 @media (max-width: 768px) {
     .controls {
         flex-direction: column;
+    }
+
+    .book-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .book-item img {
+        margin-right: 0;
+        margin-bottom: 10px;
     }
 }
