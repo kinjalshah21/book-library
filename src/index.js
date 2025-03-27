@@ -1,11 +1,13 @@
 const booksContainer = document.getElementById('books-container');
 const searchBtn = document.getElementById('search-btn');
+const toggleViewBtn = document.getElementById('toggle-view');
 
 let books = [];
 let isGridView = false;
 let currentPage = 1;
-let booksPerPage = 10;
+let booksPerPage = 9;
 
+//fetch book data from API
 async function fetchBooksInfo() {
     try {
         const response = await fetch(
@@ -21,6 +23,7 @@ async function fetchBooksInfo() {
     }
 }
 
+//display books on UI.
 function displayBooks() {
     
     books.forEach(book => {
@@ -31,6 +34,10 @@ function displayBooks() {
 
         const bookItem = document.createElement("div");
         bookItem.classList.add('book-item');
+
+        if (isGridView) {
+            bookItem.classList.add("grid-item");
+        }
 
         bookItem.innerHTML = `
         <img src="${book.volumeInfo.imageLinks?.thumbnail}" alt="${bookTitle}">
@@ -49,6 +56,24 @@ function displayBooks() {
         booksContainer.appendChild(bookItem);
 
     })
+
+    booksContainer.className = isGridView ? 'grid-view' : 'list-view';
 }
 
-searchBtn.addEventListener('click', fetchBooksInfo)
+//toggle view functionality
+toggleViewBtn.addEventListener('click', () => {
+	isGridView = !isGridView;
+    toggleViewBtn.textContent = isGridView ? "Switch to List" : "Switch to Grid";
+    booksContainer.innerHTML = '';
+    displayBooks(books);
+
+});
+
+//search button functionality
+searchBtn.addEventListener('click', () => {
+    booksContainer.innerHTML = '';
+    displayBooks(books);
+});
+
+//show default books
+fetchBooksInfo();
