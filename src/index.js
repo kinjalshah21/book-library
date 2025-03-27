@@ -3,20 +3,31 @@ const searchBtn = document.getElementById('search-btn');
 const toggleViewBtn = document.getElementById('toggle-view');
 const searchInput = document.getElementById('search-text');
 const sortSelect = document.getElementById('sort');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const pageInfo = document.getElementById('page-info');
 
 let currentBooks = [];
 let isGridView = false;
 let currentPage = 1;
-let booksPerPage = 30;
+let booksPerPage = 12;
+let isNext = true;
+let isPrevious = false;
+let totalPages = '';
 
 //fetch book data from API
 async function fetchBooksInfo() {
     try {
         const response = await fetch(`https://api.freeapi.app/api/v1/public/books?page=${currentPage}&limit=${booksPerPage}&inc=kind%252Cid%252Cetag%252CvolumeInfo`);
-		const jsonData = await response.json();
+		
+        const jsonData = await response.json();
         currentBooks = jsonData.data.data;
-		// console.log('currentBooks ::', currentBooks);
+        isPrevious = jsonData.data.previousPage;
+        isNext = jsonData.data.nextPage;
+        totalPages = jsonData.data.totalPages;
+
         displayBooks(currentBooks);
+        handleButtonVisibility();
     } catch (error) {
         alert('Error fetching books. Please try again in sometime.')
         console.log('Error fetching Books', error);
@@ -87,32 +98,55 @@ searchBtn.addEventListener('click', () => {
 //function to sort the books based on title or publisher date
 function sortBooks() {
     const sortBy = sortSelect.value;
-    // console.log('sortby ::', sortBy);
     
     const sortedBooks = [...currentBooks];
     if(sortBy == 'title'){
         sortedBooks.sort((a, b) => {
             let titleA = a.volumeInfo.title.toLowerCase();
             let titleB = b.volumeInfo.title.toLowerCase();
-
-            // console.log('titleA.localeCompare(titleB)' , titleA.localeCompare(titleB));
             return titleA.localeCompare(titleB);
         });
     } else if ((sortBy == 'publishedDate')) {
         sortedBooks.sort((a, b) => {
             let dateA = new Date(a.volumeInfo.publishedDate);
             let dateB = new Date(b.volumeInfo.publishedDate);
-            // console.log('dateA - dateB ::', dateA - dateB);
             return dateA - dateB;
         })
     }
-    // console.log(sortedBooks);
     booksContainer.innerHTML = '';
     displayBooks(sortedBooks);
 }
 
-//attach eventlistener for Sorting of the books
+//function to handle next pagination button
+function handleNext() {
+    if(isNext) {
+        currentPage++;
+        pageInfo.textContent = `Page ${currentPage}`;
+        booksContainer.innerHTML = '';
+        fetchBooksInfo();
+    }
+}
+
+//function to handle previous pagination button
+function handlePrevious() {
+    if(isPrevious) {
+        currentPage--;
+        pageInfo.textContent = `Page ${currentPage}`;
+        booksContainer.innerHTML = '';
+        fetchBooksInfo();
+    }
+}
+
+//function to handle button visibility
+function handleButtonVisibility() {
+    nextBtn.disabled = !isNext;
+    prevBtn.disabled = !isPrevious;
+}
+
+//attach eventlisteners
 sortSelect.addEventListener('change', sortBooks);
+nextBtn.addEventListener('click', handleNext);
+prevBtn.addEventListener('click', handlePrevious);
 
 //show default books
 fetchBooksInfo();

@@ -14,6 +14,7 @@
             <div>
                 <button id="search-btn">Search</button>
                 <select id="sort">
+                    <option value="default">Sort by</option>
                     <option value="title">Sort by Title</option>
                     <option value="publishedDate">Sort by Date</option>
                 </select>
@@ -26,9 +27,9 @@
 
         <!-- Pagination -->
         <div class="pagination">
-            <button id="prevPage" disabled>Previous</button>
-            <span id="pageInfo">Page 1</span>
-            <button id="nextPage">Next</button>
+            <button id="prev-btn" disabled>Previous</button>
+            <span id="page-info">Page 1</span>
+            <button id="next-btn">Next</button>
         </div>
     </div>
     <script src="./src/index.js"></script>
