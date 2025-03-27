@@ -92,7 +92,7 @@ searchBtn.addEventListener('click', () => {
     })
 
     displayBooks(filteredBooks);
-
+    searchInput.value = '';
 });
 
 //function to sort the books based on title or publisher date
