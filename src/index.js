@@ -1,22 +1,21 @@
 const booksContainer = document.getElementById('books-container');
 const searchBtn = document.getElementById('search-btn');
 const toggleViewBtn = document.getElementById('toggle-view');
+const searchInput = document.getElementById('search-text');
 
-let books = [];
+let currentBooks = [];
 let isGridView = false;
 let currentPage = 1;
-let booksPerPage = 9;
+let booksPerPage = 30;
 
 //fetch book data from API
 async function fetchBooksInfo() {
     try {
-        const response = await fetch(
-			`https://api.freeapi.app/api/v1/public/books?page=${currentPage}&limit=${booksPerPage}`
-		);
+        const response = await fetch(`https://api.freeapi.app/api/v1/public/books?page=${currentPage}&limit=${booksPerPage}&inc=kind%252Cid%252Cetag%252CvolumeInfo`);
 		const jsonData = await response.json();
-        books = jsonData.data.data;
-		// console.log('books ::', books);
-        displayBooks();
+        currentBooks = jsonData.data.data;
+		// console.log('currentBooks ::', currentBooks);
+        displayBooks(currentBooks);
     } catch (error) {
         alert('Error fetching books. Please try again in sometime.')
         console.log('Error fetching Books', error);
@@ -24,7 +23,7 @@ async function fetchBooksInfo() {
 }
 
 //display books on UI.
-function displayBooks() {
+function displayBooks(books) {
     
     books.forEach(book => {
         let bookTitle = book.volumeInfo.title || "Unknown";
@@ -65,14 +64,23 @@ toggleViewBtn.addEventListener('click', () => {
 	isGridView = !isGridView;
     toggleViewBtn.textContent = isGridView ? "Switch to List" : "Switch to Grid";
     booksContainer.innerHTML = '';
-    displayBooks(books);
+    displayBooks(currentBooks);
 
 });
 
-//search button functionality
+//search button functionality to filter by title or author
 searchBtn.addEventListener('click', () => {
     booksContainer.innerHTML = '';
-    displayBooks(books);
+    let searchTerm = searchInput.value.toLowerCase();
+
+    const filteredBooks = currentBooks.filter(book => {
+        const title = book.volumeInfo.title.toLowerCase();
+        const authors = book.volumeInfo.authors?.join(',').toLowerCase() || '';
+        return title.includes(searchTerm) || authors.includes(searchTerm);
+    })
+
+    displayBooks(filteredBooks);
+
 });
 
 //show default books
