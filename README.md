@@ -53,5 +53,11 @@ let books = jsonData.data.data;
 #### Search
 ![image](https://github.com/user-attachments/assets/2e0504f3-2427-4c99-a79e-06c76bdda95c)
 
+## 🌐 Live Demo
+
+You can check out the deployed project here:
+
+🔗 [Live Demo](https://kinjalshah21.github.io/book-library)
+
 
 
