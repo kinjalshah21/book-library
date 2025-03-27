@@ -2,6 +2,7 @@ const booksContainer = document.getElementById('books-container');
 const searchBtn = document.getElementById('search-btn');
 const toggleViewBtn = document.getElementById('toggle-view');
 const searchInput = document.getElementById('search-text');
+const sortSelect = document.getElementById('sort');
 
 let currentBooks = [];
 let isGridView = false;
@@ -82,6 +83,36 @@ searchBtn.addEventListener('click', () => {
     displayBooks(filteredBooks);
 
 });
+
+//function to sort the books based on title or publisher date
+function sortBooks() {
+    const sortBy = sortSelect.value;
+    // console.log('sortby ::', sortBy);
+    
+    const sortedBooks = [...currentBooks];
+    if(sortBy == 'title'){
+        sortedBooks.sort((a, b) => {
+            let titleA = a.volumeInfo.title.toLowerCase();
+            let titleB = b.volumeInfo.title.toLowerCase();
+
+            // console.log('titleA.localeCompare(titleB)' , titleA.localeCompare(titleB));
+            return titleA.localeCompare(titleB);
+        });
+    } else if ((sortBy == 'publishedDate')) {
+        sortedBooks.sort((a, b) => {
+            let dateA = new Date(a.volumeInfo.publishedDate);
+            let dateB = new Date(b.volumeInfo.publishedDate);
+            // console.log('dateA - dateB ::', dateA - dateB);
+            return dateA - dateB;
+        })
+    }
+    // console.log(sortedBooks);
+    booksContainer.innerHTML = '';
+    displayBooks(sortedBooks);
+}
+
+//attach eventlistener for Sorting of the books
+sortSelect.addEventListener('change', sortBooks);
 
 //show default books
 fetchBooksInfo();
